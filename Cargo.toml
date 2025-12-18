@@ -1,0 +1,57 @@
+[package]
+name = "kql-language-tools"
+version = "0.1.0"
+edition = "2021"
+authors = ["Dolly Parseton <dolly-parseton@protonmail.com>"]
+license = "MIT"
+repository = "https://github.com/dolly-parseton/kql-language-tools"
+description = "Rust bindings to Kusto.Language for KQL validation and language services"
+keywords = ["kql", "kusto", "validation", "language-tools"]
+categories = ["api-bindings", "development-tools"]
+readme = "README.md"
+rust-version = "1.70"
+include = [
+    "src/**/*",
+    "examples/**/*",
+    "build.rs",
+    "README.md",
+    "LICENSE",
+    "dotnet/src/**/*",
+    "dotnet/*.csproj",
+    "dotnet/build.sh",
+]
+
+[features]
+default = []
+# Use bundled native library (requires pre-built binaries)
+bundled = []
+
+[dependencies]
+libloading = "0.8"
+
+# Serialization (for JSON protocol)
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Error handling
+thiserror = "2.0"
+
+# Logging
+log = "0.4"
+
+# Thread-safe singleton (for fallible init - std OnceLock::get_or_try_init still unstable)
+once_cell = "1.19"
+
+[dev-dependencies]
+env_logger = "0.11"
+
+[lints.rust]
+unsafe_code = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+# Allow common patterns
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
