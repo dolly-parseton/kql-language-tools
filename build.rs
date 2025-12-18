@@ -16,6 +16,16 @@ fn main() {
     println!("cargo:rerun-if-changed=dotnet/KqlLanguageFfi.csproj");
 
     let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+
+    // Skip build during cargo publish verification - we can't write outside OUT_DIR
+    // Cargo extracts the package to target/package/<name>-<version>/ for verification
+    if manifest_dir
+        .components()
+        .any(|c| c.as_os_str() == "package")
+    {
+        println!("cargo:warning=Skipping native build during package verification");
+        return;
+    }
     let dotnet_dir = manifest_dir.join("dotnet");
 
     // Determine current platform RID
